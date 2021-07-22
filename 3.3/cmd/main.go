@@ -1,6 +1,6 @@
 package main
 
-import count "count2"
+import "count"
 
 func main() {
 	count.Lines()

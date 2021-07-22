@@ -2,8 +2,7 @@ package count_test
 
 import (
 	"bytes"
-	count "count2"
-	"os"
+	"count"
 	"testing"
 )
 

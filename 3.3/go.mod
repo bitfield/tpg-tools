@@ -1,3 +1,3 @@
-module count2
+module count
 
 go 1.16
