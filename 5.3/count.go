@@ -31,6 +31,7 @@ func WithArgs(args []string) option {
 	return func (c *counter) error {
 		fs := flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
 		wordCount := fs.Bool("w", false, "Count words instead of lines")
+		fs.SetOutput(c.output)
 		err := fs.Parse(args)
 		if err != nil {
 			return err

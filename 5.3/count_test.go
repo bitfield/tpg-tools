@@ -3,6 +3,7 @@ package count_test
 import (
 	"bytes"
 	"count"
+	"io"
 	"testing"
 )
 
@@ -65,6 +66,18 @@ func TestWithInputFromArgsErrorsOnEmptySlice(t *testing.T) {
 	)
 	if err == nil {
 		t.Fatal("want error on empty slice, got nil")
+	}
+}
+
+func TestWithInputFromArgsErrorsOnBogusFlag(t *testing.T) {
+	t.Parallel()
+	args := []string{"-bogus"}
+	_, err := count.NewCounter(
+		count.WithOutput(io.Discard),
+		count.WithArgs(args),
+	)
+	if err == nil {
+		t.Fatal("want error on bogus flag, got nil")
 	}
 }
 
