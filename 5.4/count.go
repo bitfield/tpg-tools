@@ -9,16 +9,16 @@ import (
 	"os"
 )
 
-type counter struct{
+type counter struct {
 	wordCount bool
-	input io.Reader
-	output io.Writer
+	input     io.Reader
+	output    io.Writer
 }
 
 type option func(*counter) error
 
 func WithInput(input io.Reader) option {
-	return func (c *counter) error {
+	return func(c *counter) error {
 		if input == nil {
 			return errors.New("nil input reader")
 		}
@@ -27,8 +27,8 @@ func WithInput(input io.Reader) option {
 	}
 }
 
-func WithArgs(args []string) option {
-	return func (c *counter) error {
+func FromArgs(args []string) option {
+	return func(c *counter) error {
 		fs := flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
 		wordCount := fs.Bool("w", false, "Count words instead of lines")
 		fs.SetOutput(c.output)
@@ -51,7 +51,7 @@ func WithArgs(args []string) option {
 }
 
 func WithOutput(output io.Writer) option {
-	return func (c *counter) error {
+	return func(c *counter) error {
 		if output == nil {
 			return errors.New("nil output writer")
 		}
@@ -62,7 +62,7 @@ func WithOutput(output io.Writer) option {
 
 func NewCounter(opts ...option) (counter, error) {
 	c := counter{
-		input: os.Stdin,
+		input:  os.Stdin,
 		output: os.Stdout,
 	}
 	for _, opt := range opts {
@@ -74,26 +74,35 @@ func NewCounter(opts ...option) (counter, error) {
 	return c, nil
 }
 
-func (c counter) Lines() {
-	fmt.Fprintln(c.output, c.Count())
-}
-
-func (c counter) Count() int {
+func (c counter) Lines() int {
 	count := 0
 	scanner := bufio.NewScanner(c.input)
-	if c.wordCount {
-		scanner.Split(bufio.ScanWords)
-	}
 	for scanner.Scan() {
 		count++
 	}
 	return count
 }
 
-func Lines() {
-	c, err := NewCounter()
-	if err != nil {
-		panic("internal error calling NewCounter")
+func (c counter) Words() int {
+	count := 0
+	scanner := bufio.NewScanner(c.input)
+	scanner.Split(bufio.ScanWords)
+	for scanner.Scan() {
+		count++
 	}
-	c.Lines()
+	return count
+}
+
+func Count() {
+	c, err := NewCounter(
+		FromArgs(os.Args[1:]),
+	)
+	if err != nil {
+		panic(fmt.Errorf("internal error: %v", err))
+	}
+	if c.wordCount {
+		fmt.Println(c.Words())
+	} else {
+		fmt.Println(c.Lines())
+	}
 }

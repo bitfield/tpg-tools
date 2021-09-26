@@ -2,8 +2,9 @@ package main
 
 import (
 	"hello"
+	"os"
 )
 
 func main() {
-	hello.Print()
+	hello.PrintTo(os.Stdout)
 }

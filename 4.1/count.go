@@ -3,20 +3,19 @@ package count
 import (
 	"bufio"
 	"errors"
-	"fmt"
 	"io"
 	"os"
 )
 
-type counter struct{
-	input io.Reader
+type counter struct {
+	input  io.Reader
 	output io.Writer
 }
 
 type option func(*counter) error
 
 func WithInput(input io.Reader) option {
-	return func (c *counter) error {
+	return func(c *counter) error {
 		if input == nil {
 			return errors.New("nil input reader")
 		}
@@ -26,9 +25,9 @@ func WithInput(input io.Reader) option {
 }
 
 func WithInputFromArgs(args []string) option {
-	return func (c *counter) error {
+	return func(c *counter) error {
 		if len(args) < 1 {
-			return errors.New("no args supplied")
+			return nil
 		}
 		f, err := os.Open(args[0])
 		if err != nil {
@@ -40,7 +39,7 @@ func WithInputFromArgs(args []string) option {
 }
 
 func WithOutput(output io.Writer) option {
-	return func (c *counter) error {
+	return func(c *counter) error {
 		if output == nil {
 			return errors.New("nil output writer")
 		}
@@ -51,7 +50,7 @@ func WithOutput(output io.Writer) option {
 
 func NewCounter(opts ...option) (counter, error) {
 	c := counter{
-		input: os.Stdin,
+		input:  os.Stdin,
 		output: os.Stdout,
 	}
 	for _, opt := range opts {
@@ -63,11 +62,7 @@ func NewCounter(opts ...option) (counter, error) {
 	return c, nil
 }
 
-func (c counter) Lines() {
-	fmt.Fprintln(c.output, c.NumberOfLines())
-}
-
-func (c counter) NumberOfLines() int {
+func (c counter) Lines() int {
 	lines := 0
 	scanner := bufio.NewScanner(c.input)
 	for scanner.Scan() {
@@ -76,10 +71,12 @@ func (c counter) NumberOfLines() int {
 	return lines
 }
 
-func Lines() {
-	c, err := NewCounter()
+func Lines() int {
+	c, err := NewCounter(
+		WithInputFromArgs(os.Args[1:]),
+	)
 	if err != nil {
-		panic("internal error calling NewCounter")
+		panic("internal error")
 	}
-	c.Lines()
+	return c.Lines()
 }

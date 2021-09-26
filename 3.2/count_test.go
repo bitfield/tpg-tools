@@ -6,16 +6,13 @@ import (
 	"testing"
 )
 
-func TestCountLines(t *testing.T) {
+func TestLines(t *testing.T) {
 	t.Parallel()
 	c := count.NewCounter()
-	buf := &bytes.Buffer{}
-	c.Output = buf
 	c.Input = bytes.NewBufferString("1\n2\n3")
-	want := "3\n"
-	c.Lines()
-	got := buf.String()
+	want := 3
+	got := c.Lines()
 	if want != got {
-		t.Errorf("want %q, got %q", want, got)
+		t.Errorf("want %d, got %d", want, got)
 	}
 }

@@ -6,5 +6,5 @@ import (
 )
 
 func main() {
-	fmt.Println(count.Lines())
+	fmt.Println(count.Words())
 }

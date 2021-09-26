@@ -1,7 +1,10 @@
 package main
 
-import "count"
+import (
+	"count"
+	"fmt"
+)
 
 func main() {
-	count.Lines()
+	fmt.Println(count.Lines())
 }

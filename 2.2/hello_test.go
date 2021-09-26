@@ -3,14 +3,15 @@ package hello_test
 import (
 	"bytes"
 	"hello"
-	"io"
 	"testing"
 )
 
 func TestPrintsHelloMessageToWriter(t *testing.T) {
-	t.Parallel()
 	fakeTerminal := &bytes.Buffer{}
-	hello.PrintTo(io.Writer(fakeTerminal))
+	p := hello.Printer{
+		Output: fakeTerminal,
+	}
+	p.Print()
 	want := "Hello, world\n"
 	got := fakeTerminal.String()
 	if want != got {
