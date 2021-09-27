@@ -1,7 +1,9 @@
 package main
 
-import "count"
+import (
+	"count"
+)
 
 func main() {
-	count.Count()
+	count.RunCLI()
 }

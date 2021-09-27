@@ -1,6 +1,7 @@
 package count_test
 
 import (
+	"bytes"
 	"count"
 	"io"
 	"testing"
@@ -22,14 +23,20 @@ func TestFromArgs(t *testing.T) {
 	}
 }
 
-func TestFromArgsErrorsOnEmptySlice(t *testing.T) {
+func TestFromArgsEmpty(t *testing.T) {
 	t.Parallel()
-	args := []string{}
-	_, err := count.NewCounter(
-		count.FromArgs(args),
+	inputBuf := bytes.NewBufferString("1\n2\n3")
+	c, err := count.NewCounter(
+		count.WithInput(inputBuf),
+		count.FromArgs([]string{}),
 	)
-	if err == nil {
-		t.Fatal("want error on empty slice, got nil")
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := 3
+	got := c.Lines()
+	if want != got {
+		t.Errorf("want %d, got %d", want, got)
 	}
 }
 

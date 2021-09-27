@@ -39,7 +39,7 @@ func FromArgs(args []string) option {
 		c.wordCount = *wordCount
 		args = fs.Args()
 		if len(args) < 1 {
-			return errors.New("no args supplied")
+			return nil
 		}
 		f, err := os.Open(args[0])
 		if err != nil {
@@ -93,12 +93,13 @@ func (c counter) Words() int {
 	return count
 }
 
-func Count() {
+func RunCLI() {
 	c, err := NewCounter(
 		FromArgs(os.Args[1:]),
 	)
 	if err != nil {
-		panic(fmt.Errorf("internal error: %v", err))
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
 	}
 	if c.wordCount {
 		fmt.Println(c.Words())

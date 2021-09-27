@@ -3,6 +3,7 @@ package count
 import (
 	"bufio"
 	"errors"
+	"fmt"
 	"io"
 	"os"
 )
@@ -71,14 +72,6 @@ func (c counter) Lines() int {
 	return lines
 }
 
-func Lines() int {
-	c, err := NewCounter()
-	if err != nil {
-		panic("internal error")
-	}
-	return c.Lines()
-}
-
 func (c counter) Words() int {
 	words := 0
 	scanner := bufio.NewScanner(c.input)
@@ -89,10 +82,24 @@ func (c counter) Words() int {
 	return words
 }
 
-func Words() int {
-	c, err := NewCounter()
+func Lines() int {
+	c, err := NewCounter(
+		WithInputFromArgs(os.Args[1:]),
+	)
 	if err != nil {
-		panic("internal error")
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+	return c.Lines()
+}
+
+func Words() int {
+	c, err := NewCounter(
+		WithInputFromArgs(os.Args[1:]),
+	)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
 	}
 	return c.Words()
 }
