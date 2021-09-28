@@ -1,18 +1,20 @@
-package findgo
+package main
 
 import (
+	"fmt"
 	"io/fs"
 	"os"
 	"path/filepath"
 )
 
-func Files(path string) (count int) {
-	fsys := os.DirFS(path)
+func main() {
+	var count int
+	fsys := os.DirFS("findgo")
 	fs.WalkDir(fsys, ".", func(p string, d fs.DirEntry, err error) error {
 		if filepath.Ext(p) == ".go" {
 			count++
 		}
 		return nil
 	})
-	return count
+	fmt.Println(count)
 }

@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	fmt.Println(findFiles("findgo", 0))
+	fmt.Println(findFiles("./findgo", 0))
 }
 
 func findFiles(folder string, count int) int {

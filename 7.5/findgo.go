@@ -7,8 +7,7 @@ import (
 	"path/filepath"
 )
 
-func Files(path string) (count int) {
-	fsys := os.DirFS(path)
+func Files(fsys fs.FS) (count int) {
 	err := fs.WalkDir(fsys, ".", func(path string, d fs.DirEntry, err error) error {
 		if filepath.Ext(path) == ".go" {
 			count++
@@ -17,6 +16,17 @@ func Files(path string) (count int) {
 	})
 	if err != nil {
 		log.Fatal(err)
+	}
+	return count
+}
+
+func FilesFromArgs(args []string) (count int) {
+	if len(args) < 1 {
+		return 0
+	}
+	for _, arg := range args {
+		fsys := os.DirFS(arg)
+		count += Files(fsys)
 	}
 	return count
 }
