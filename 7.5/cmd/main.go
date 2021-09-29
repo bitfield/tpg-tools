@@ -7,5 +7,5 @@ import (
 )
 
 func main() {
-	fmt.Println(findgo.FilesFromArgs(os.Args))
+	fmt.Println(findgo.Files(os.DirFS(os.Args[1])))
 }

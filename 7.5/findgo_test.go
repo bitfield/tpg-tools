@@ -1,6 +1,7 @@
 package findgo_test
 
 import (
+	"archive/zip"
 	"findgo"
 	"os"
 	"testing"
@@ -10,17 +11,8 @@ import (
 func TestFilesOnDisk(t *testing.T) {
 	t.Parallel()
 	fsys := os.DirFS("testdata/findgo")
-	want := 2
-	got := findgo.Files(fsys)
-	if want != got {
-		t.Errorf("want %d, got %d", want, got)
-	}
-}
-
-func TestFilesFromArgs(t *testing.T) {
-	t.Parallel()
 	want := 4
-	got := findgo.FilesFromArgs([]string{"testdata/findgo", "testdata/findgo"})
+	got := findgo.Files(fsys)
 	if want != got {
 		t.Errorf("want %d, got %d", want, got)
 	}
@@ -31,8 +23,23 @@ func TestFilesInMemory(t *testing.T) {
 	fsys := fstest.MapFS{
 		"file.go":                {},
 		"subfolder/subfolder.go": {},
+		"subfolder2/another.go":  {},
+		"subfolder2/file.go":     {},
 	}
-	want := 2
+	want := 4
+	got := findgo.Files(fsys)
+	if want != got {
+		t.Errorf("want %d, got %d", want, got)
+	}
+}
+
+func TestFilesInZIP(t *testing.T) {
+	t.Parallel()
+	fsys, err := zip.OpenReader("testdata/findgo.zip")
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := 4
 	got := findgo.Files(fsys)
 	if want != got {
 		t.Errorf("want %d, got %d", want, got)
@@ -51,6 +58,8 @@ func BenchmarkFilesInMemory(b *testing.B) {
 	fsys := fstest.MapFS{
 		"file.go":                {},
 		"subfolder/subfolder.go": {},
+		"subfolder2/another.go":  {},
+		"subfolder2/file.go":     {},
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
