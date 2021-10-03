@@ -6,5 +6,6 @@ import (
 )
 
 func main() {
-	shell.NewSession(os.Stdin, os.Stdout, os.Stderr).Run()
+	session := shell.NewSession(os.Stdin, os.Stdout, os.Stderr)
+	session.Run()
 }

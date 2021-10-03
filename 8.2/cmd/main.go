@@ -18,12 +18,11 @@ func main() {
 		}
 		cmd, err := shell.CommandFromString(line)
 		if err != nil {
-			fmt.Println("Please enter a command")
 			continue
 		}
 		out, err := cmd.CombinedOutput()
 		if err != nil {
-			fmt.Println("error")
+			fmt.Println("error:", err)
 		}
 		fmt.Printf("%s", out)
 	}

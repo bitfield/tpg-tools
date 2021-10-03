@@ -12,6 +12,7 @@ import (
 )
 
 func TestCommandFromStringErrorsOnEmptyInput(t *testing.T) {
+	t.Parallel()
 	_, err := shell.CommandFromString("")
 	if err == nil {
 		t.Fatal("want error on empty input, got nil")
@@ -19,18 +20,20 @@ func TestCommandFromStringErrorsOnEmptyInput(t *testing.T) {
 }
 
 func TestCommandFromString(t *testing.T) {
-	cmd, err := shell.CommandFromString("/bin/ls -l\n")
+	t.Parallel()
+	cmd, err := shell.CommandFromString("/bin/ls -l main.go\n")
 	if err != nil {
 		t.Fatal(err)
 	}
-	wantArgs := []string{"/bin/ls", "-l"}
-	gotArgs := cmd.Args
-	if !cmp.Equal(wantArgs, gotArgs) {
-		t.Error(cmp.Diff(wantArgs, gotArgs))
+	args := []string{"/bin/ls", "-l", "main.go"}
+	got := cmd.Args
+	if !cmp.Equal(args, got) {
+		t.Error(cmp.Diff(args, got))
 	}
 }
 
 func TestNewSession(t *testing.T) {
+	t.Parallel()
 	stdin := os.Stdin
 	stdout := os.Stdout
 	stderr := os.Stderr
@@ -45,25 +48,15 @@ func TestNewSession(t *testing.T) {
 	}
 }
 
-func TestRunPrintsGoodbyeOnEOF(t *testing.T) {
-	stdin := strings.NewReader("")
+func TestRun(t *testing.T) {
+	t.Parallel()
+	stdin := strings.NewReader("echo hello\n\n")
 	stdout := &bytes.Buffer{}
 	session := shell.NewSession(stdin, stdout, io.Discard)
+	session.DryRun = true
 	session.Run()
-	want := "> \nBe seeing you!"
+	want := "> echo hello\n> > \nBe seeing you!\n"
 	got := stdout.String()
-	if !cmp.Equal(want, got) {
-		t.Error(cmp.Diff(want, got))
-	}
-}
-
-func TestRunPrintsReminderOnEmptyCommand(t *testing.T) {
-	stdin := strings.NewReader("\n")
-	stderr := &bytes.Buffer{}
-	session := shell.NewSession(stdin, io.Discard, stderr)
-	session.Run()
-	want := "Please enter a command\n"
-	got := stderr.String()
 	if !cmp.Equal(want, got) {
 		t.Error(cmp.Diff(want, got))
 	}

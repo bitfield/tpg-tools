@@ -8,6 +8,7 @@ import (
 )
 
 func TestCommandFromStringErrorsOnEmptyInput(t *testing.T) {
+	t.Parallel()
 	_, err := shell.CommandFromString("")
 	if err == nil {
 		t.Fatal("want error on empty input, got nil")
@@ -15,13 +16,14 @@ func TestCommandFromStringErrorsOnEmptyInput(t *testing.T) {
 }
 
 func TestCommandFromString(t *testing.T) {
-	cmd, err := shell.CommandFromString("/bin/ls -l\n")
+	t.Parallel()
+	cmd, err := shell.CommandFromString("/bin/ls -l main.go\n")
 	if err != nil {
 		t.Fatal(err)
 	}
-	wantArgs := []string{"/bin/ls", "-l"}
-	gotArgs := cmd.Args
-	if !cmp.Equal(wantArgs, gotArgs) {
-		t.Error(cmp.Diff(wantArgs, gotArgs))
+	want := []string{"/bin/ls", "-l", "main.go"}
+	got := cmd.Args
+	if !cmp.Equal(want, got) {
+		t.Error(cmp.Diff(want, got))
 	}
 }

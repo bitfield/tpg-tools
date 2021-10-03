@@ -12,6 +12,7 @@ import (
 type Session struct {
 	Stdin          io.Reader
 	Stdout, Stderr io.Writer
+	DryRun         bool
 }
 
 func NewSession(stdin io.Reader, stdout, stderr io.Writer) *Session {
@@ -19,18 +20,32 @@ func NewSession(stdin io.Reader, stdout, stderr io.Writer) *Session {
 		Stdin:  stdin,
 		Stdout: stdout,
 		Stderr: stderr,
+		DryRun: false,
 	}
 }
 
 func (s *Session) Run() {
 	input := bufio.NewReader(s.Stdin)
-	fmt.Fprintf(s.Stdout, "> ")
-	line, err := input.ReadString('\n')
-	if err != nil {
-		fmt.Fprint(s.Stdout, "\nBe seeing you!")
-	}
-	if line == "\n" {
-		fmt.Fprintln(s.Stderr, "Please enter a command")
+	for {
+		fmt.Fprintf(s.Stdout, "> ")
+		line, err := input.ReadString('\n')
+		if err != nil {
+			fmt.Fprintln(s.Stdout, "\nBe seeing you!")
+			break
+		}
+		cmd, err := CommandFromString(line)
+		if err != nil {
+			continue
+		}
+		if s.DryRun {
+			fmt.Fprintf(s.Stdout, "%s", line)
+			continue
+		}
+		output, err := cmd.CombinedOutput()
+		if err != nil {
+			fmt.Fprintln(s.Stderr, "error:", err)
+		}
+		fmt.Fprintf(s.Stdout, "%s", output)
 	}
 }
 
