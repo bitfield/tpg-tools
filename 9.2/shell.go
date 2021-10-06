@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"os"
 	"os/exec"
 	"strings"
 )
@@ -55,4 +56,9 @@ func CommandFromString(cmdLine string) (*exec.Cmd, error) {
 		return nil, errors.New("empty input")
 	}
 	return exec.Command(args[0], args[1:]...), nil
+}
+
+func RunCLI() {
+	session := NewSession(os.Stdin, os.Stdout, os.Stderr)
+	session.Run()
 }

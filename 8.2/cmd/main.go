@@ -1,29 +1,15 @@
 package main
 
 import (
-	"bufio"
+	"battery"
 	"fmt"
 	"os"
-	"shell"
 )
 
 func main() {
-	input := bufio.NewReader(os.Stdin)
-	for {
-		fmt.Print("> ")
-		line, err := input.ReadString('\n')
-		if err != nil {
-			fmt.Println("\nBe seeing you!")
-			break
-		}
-		cmd, err := shell.CommandFromString(line)
-		if err != nil {
-			continue
-		}
-		out, err := cmd.CombinedOutput()
-		if err != nil {
-			fmt.Println("error:", err)
-		}
-		fmt.Printf("%s", out)
+	status, err := battery.GetStatus()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "couldn't read battery status: %v", err)
 	}
+	fmt.Printf("Battery %d%% charged\n", status.ChargePercent)
 }

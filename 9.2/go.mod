@@ -1,4 +1,4 @@
-module battery
+module shell
 
 go 1.17
 
