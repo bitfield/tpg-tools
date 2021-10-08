@@ -11,5 +11,5 @@ func CommandFromString(cmdLine string) (*exec.Cmd, error) {
 	if len(args) < 1 {
 		return nil, errors.New("empty input")
 	}
-	return exec.Command(args[0], args[1:]), nil
+	return exec.Command(args[0], args[1:]...), nil
 }
