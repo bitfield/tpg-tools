@@ -29,15 +29,15 @@ func WithInput(input io.Reader) option {
 
 func FromArgs(args []string) option {
 	return func(c *counter) error {
-		fs := flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
-		wordCount := fs.Bool("w", false, "Count words instead of lines")
-		fs.SetOutput(c.output)
-		err := fs.Parse(args)
+		fset := flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
+		wordCount := fset.Bool("w", false, "Count words instead of lines")
+		fset.SetOutput(c.output)
+		err := fset.Parse(args)
 		if err != nil {
 			return err
 		}
 		c.wordCount = *wordCount
-		args = fs.Args()
+		args = fset.Args()
 		if len(args) < 1 {
 			return nil
 		}

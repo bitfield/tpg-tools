@@ -1,8 +1,6 @@
 package main
 
 import (
-	"errors"
-	"fmt"
 	"io"
 	"log"
 	"os"
@@ -27,7 +25,6 @@ type safeWriter struct {
 
 func (sw *safeWriter) Write(data []byte) {
 	if sw.Error != nil {
-		fmt.Println("no-op")
 		return
 	}
 	_, err := sw.w.Write(data)
@@ -40,7 +37,6 @@ func write(w io.Writer) error {
 	metadata := []byte{1, 2, 3}
 	sw := safeWriter{w: w}
 	sw.Write(metadata)
-	sw.Error = errors.New("fake error")
 	sw.Write(metadata)
 	sw.Write(metadata)
 	sw.Write(metadata)
