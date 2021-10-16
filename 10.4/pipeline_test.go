@@ -11,7 +11,7 @@ import (
 func TestStdout(t *testing.T) {
 	t.Parallel()
 	want := "Hello, world\n"
-	p := pipeline.String(want)
+	p := pipeline.FromString(want)
 	buf := &bytes.Buffer{}
 	p.Output = buf
 	p.Stdout()

@@ -11,7 +11,7 @@ type Pipeline struct {
 	Error  error
 }
 
-func String(s string) *Pipeline {
+func FromString(s string) *Pipeline {
 	return &Pipeline{
 		Reader: strings.NewReader(s),
 	}
