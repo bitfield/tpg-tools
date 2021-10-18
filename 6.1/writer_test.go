@@ -25,7 +25,7 @@ func TestWriteToFile(t *testing.T) {
 	}
 }
 
-func TestWriteToFileClobbersExistingFile(t *testing.T) {
+func TestWriteToFileClobbers(t *testing.T) {
 	t.Parallel()
 	path := t.TempDir() + "/clobber_test.txt"
 	err := os.WriteFile(path, []byte{4, 5, 6}, 0666)

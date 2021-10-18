@@ -3,6 +3,7 @@ package count
 import (
 	"bufio"
 	"errors"
+	"fmt"
 	"io"
 	"os"
 )
@@ -76,7 +77,8 @@ func Lines() int {
 		WithInputFromArgs(os.Args[1:]),
 	)
 	if err != nil {
-		panic("internal error")
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
 	}
 	return c.Lines()
 }

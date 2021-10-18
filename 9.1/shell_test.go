@@ -17,7 +17,7 @@ func TestCommandFromStringErrorsOnEmptyInput(t *testing.T) {
 
 func TestCommandFromString(t *testing.T) {
 	t.Parallel()
-	cmd, err := shell.CommandFromString("/bin/ls -l main.go\n")
+	cmd, err := shell.CommandFromString("/bin/ls -l main.go")
 	if err != nil {
 		t.Fatal(err)
 	}

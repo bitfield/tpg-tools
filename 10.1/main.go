@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	f, err := os.Open("access.log")
+	f, err := os.Open("log")
 	if err != nil {
 		log.Fatal(err)
 	}

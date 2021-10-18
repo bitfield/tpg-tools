@@ -7,9 +7,9 @@ import (
 )
 
 func main() {
-	f := flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
-	countWords := f.Bool("w", false, "Count words instead of lines")
-	f.Parse(os.Args[1:])
+	fset := flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
+	countWords := fset.Bool("w", false, "Count words instead of lines")
+	fset.Parse(os.Args[1:])
 	if *countWords {
 		fmt.Println("We're counting words!")
 	}
