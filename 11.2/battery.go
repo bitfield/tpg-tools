@@ -2,13 +2,7 @@ package battery
 
 import (
 	"encoding/json"
-	"io"
 )
-
-type Status struct {
-	DrawingFrom string
-	Batteries   []Battery
-}
 
 type Battery struct {
 	Name             string
@@ -18,8 +12,10 @@ type Battery struct {
 	Present          bool
 }
 
-func (s Status) WriteJSONTo(w io.Writer) error {
-	enc := json.NewEncoder(w)
-	enc.SetIndent("", "  ")
-	return enc.Encode(s)
+func (b Battery) ToJSON() string {
+	output, err := json.MarshalIndent(b, "", "  ")
+	if err != nil {
+		panic(err)
+	}
+	return string(output)
 }
