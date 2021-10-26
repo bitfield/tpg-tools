@@ -14,6 +14,7 @@ func TestConfigFromYAML(t *testing.T) {
 		Global: prom.GlobalConfig{
 			ScrapeInterval:     15 * time.Second,
 			EvaluationInterval: 30 * time.Second,
+			ScrapeTimeout:      10 * time.Second,
 			ExternalLabels: map[string]string{
 				"monitor": "codelab",
 				"foo":     "bar",

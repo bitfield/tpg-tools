@@ -7,18 +7,15 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-type Label struct {
-	Name, Value string
+type Config struct {
+	Global GlobalConfig
 }
 
 type GlobalConfig struct {
 	ScrapeInterval     time.Duration     `yaml:"scrape_interval"`
 	EvaluationInterval time.Duration     `yaml:"evaluation_interval"`
+	ScrapeTimeout      time.Duration     `yaml:"scrape_timeout"`
 	ExternalLabels     map[string]string `yaml:"external_labels"`
-}
-
-type Config struct {
-	Global GlobalConfig
 }
 
 func ConfigFromYAML(path string) (Config, error) {
@@ -27,7 +24,11 @@ func ConfigFromYAML(path string) (Config, error) {
 		return Config{}, err
 	}
 	defer f.Close()
-	var config Config
+	config := Config{
+		GlobalConfig{
+			ScrapeTimeout: 10 * time.Second,
+		},
+	}
 	err = yaml.NewDecoder(f).Decode(&config)
 	if err != nil {
 		return Config{}, err
