@@ -11,7 +11,7 @@ func TestStoreFile(t *testing.T) {
 	t.Parallel()
 	path := t.TempDir() + "/store.bin"
 	output := store.Open(path)
-	want := []int{2, 5, 3, 7, 11}
+	want := []int{2, 3, 5, 7, 11}
 	err := output.Save(want)
 	if err != nil {
 		t.Fatal(err)
