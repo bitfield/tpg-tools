@@ -6,5 +6,5 @@ import (
 )
 
 func PrintTo(w io.Writer) {
-	fmt.Fprintln(w, "Hello, world")
+	fmt.Fprint(w, "Hello, world")
 }
