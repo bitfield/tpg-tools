@@ -21,7 +21,7 @@ func ParseResponse(data []byte) (Conditions, error) {
 	var resp OWMResponse
 	err := json.Unmarshal(data, &resp)
 	if err != nil {
-		return Conditions{}, fmt.Errorf("invalid API response %q: %v", data, err)
+		return Conditions{}, fmt.Errorf("invalid API response %q: %w", data, err)
 	}
 	if len(resp.Weather) < 1 {
 		return Conditions{}, fmt.Errorf("invalid API response %q: want at least one Weather element", data)

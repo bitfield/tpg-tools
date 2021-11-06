@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
 )
@@ -23,7 +22,7 @@ func ParseResponse(data []byte) (Conditions, error) {
 	var resp OWMResponse
 	err := json.Unmarshal(data, &resp)
 	if err != nil {
-		return Conditions{}, fmt.Errorf("invalid API response %s: %v", data, err)
+		return Conditions{}, fmt.Errorf("invalid API response %s: %w", data, err)
 	}
 	if len(resp.Weather) < 1 {
 		return Conditions{}, fmt.Errorf("invalid API response %s: want at least one Weather element", data)
@@ -68,7 +67,16 @@ func (c *Client) GetWeather(location string) (Conditions, error) {
 	}
 	conditions, err := ParseResponse(data)
 	if err != nil {
-		return Conditions{}, fmt.Errorf("invalid API response %s: %v", data, err)
+		return Conditions{}, fmt.Errorf("invalid API response %s: %w", data, err)
+	}
+	return conditions, nil
+}
+
+func Get(location, key string) (Conditions, error) {
+	c := NewClient(key)
+	conditions, err := c.GetWeather(location)
+	if err != nil {
+		return Conditions{}, err
 	}
 	return conditions, nil
 }
@@ -84,10 +92,10 @@ func RunCLI() {
 		os.Exit(1)
 	}
 	location := os.Args[1]
-	c := NewClient(key)
-	conditions, err := c.GetWeather(location)
+	conditions, err := Get(location, key)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
 	}
 	fmt.Println(conditions)
 }
