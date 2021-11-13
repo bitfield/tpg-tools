@@ -7,10 +7,10 @@ import (
 )
 
 func main() {
-	fmt.Println(findFiles("findgo", 0))
+	fmt.Println(countGoFiles("findgo", 0))
 }
 
-func findFiles(folder string, count int) int {
+func countGoFiles(folder string, count int) int {
 	files, err := os.ReadDir(folder)
 	if err != nil {
 		// skip
@@ -18,7 +18,7 @@ func findFiles(folder string, count int) int {
 	}
 	for _, f := range files {
 		if f.IsDir() {
-			count = findFiles(folder+"/"+f.Name(), count)
+			count = countGoFiles(folder+"/"+f.Name(), count)
 		}
 		if path.Ext(f.Name()) == ".go" {
 			count++
