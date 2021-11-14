@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func CommandFromString(cmdLine string) (*exec.Cmd, error) {
+func CmdFromString(cmdLine string) (*exec.Cmd, error) {
 	args := strings.Fields(cmdLine)
 	if len(args) < 1 {
 		return nil, errors.New("empty input")

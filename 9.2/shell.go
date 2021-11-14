@@ -34,7 +34,7 @@ func (s *Session) Run() {
 			fmt.Fprintln(s.Stdout, "\nBe seeing you!")
 			break
 		}
-		cmd, err := CommandFromString(line)
+		cmd, err := CmdFromString(line)
 		if err != nil {
 			continue
 		}
@@ -50,7 +50,7 @@ func (s *Session) Run() {
 	}
 }
 
-func CommandFromString(cmdLine string) (*exec.Cmd, error) {
+func CmdFromString(cmdLine string) (*exec.Cmd, error) {
 	args := strings.Fields(cmdLine)
 	if len(args) < 1 {
 		return nil, errors.New("empty input")

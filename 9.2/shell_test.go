@@ -11,17 +11,17 @@ import (
 	"github.com/google/go-cmp/cmp"
 )
 
-func TestCommandFromStringErrorsOnEmptyInput(t *testing.T) {
+func TestCmdFromStringErrorsOnEmptyInput(t *testing.T) {
 	t.Parallel()
-	_, err := shell.CommandFromString("")
+	_, err := shell.CmdFromString("")
 	if err == nil {
 		t.Fatal("want error on empty input, got nil")
 	}
 }
 
-func TestCommandFromString(t *testing.T) {
+func TestCmdFromString(t *testing.T) {
 	t.Parallel()
-	cmd, err := shell.CommandFromString("/bin/ls -l main.go\n")
+	cmd, err := shell.CmdFromString("/bin/ls -l main.go\n")
 	if err != nil {
 		t.Fatal(err)
 	}

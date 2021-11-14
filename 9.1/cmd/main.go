@@ -16,7 +16,7 @@ func main() {
 			fmt.Println("\nBe seeing you!")
 			break
 		}
-		cmd, err := shell.CommandFromString(line)
+		cmd, err := shell.CmdFromString(line)
 		if err != nil {
 			continue
 		}
