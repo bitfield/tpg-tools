@@ -36,9 +36,9 @@ func TestFromFileInvalid(t *testing.T) {
 
 func TestColumn(t *testing.T) {
 	t.Parallel()
-	input := "a1 b1 c1\na2 b2 c2\na3 b3 c3\n"
+	input := "1 2 3\n1 2 3\n1 2 3\n"
 	p := pipeline.FromString(input)
-	want := "b1\nb2\nb3\n"
+	want := "2\n2\n2\n"
 	got, err := p.Column(2).String()
 	if err != nil {
 		t.Fatal(err)
@@ -50,7 +50,7 @@ func TestColumn(t *testing.T) {
 
 func TestColumnError(t *testing.T) {
 	t.Parallel()
-	p := pipeline.FromString("a1 b1 c1\n")
+	p := pipeline.FromString("1 2 3\n")
 	p.Error = errors.New("oh no")
 	data, err := io.ReadAll(p.Column(1).Reader)
 	if err != nil {
