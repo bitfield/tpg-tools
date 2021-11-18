@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"time"
 )
 
 type Conditions struct {
@@ -41,9 +42,11 @@ type Client struct {
 
 func NewClient(apiKey string) *Client {
 	return &Client{
-		APIKey:     apiKey,
-		BaseURL:    "https://api.openweathermap.org",
-		HTTPClient: http.DefaultClient,
+		APIKey:  apiKey,
+		BaseURL: "https://api.openweathermap.org",
+		HTTPClient: &http.Client{
+			Timeout: 10 * time.Second,
+		},
 	}
 }
 

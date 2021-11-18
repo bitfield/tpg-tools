@@ -72,6 +72,7 @@ func TestSimpleHTTP(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer resp.Body.Close()
 	want := http.StatusOK
 	got := resp.StatusCode
 	if !cmp.Equal(want, got) {
