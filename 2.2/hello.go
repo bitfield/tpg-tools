@@ -10,13 +10,13 @@ type Printer struct {
 	Output io.Writer
 }
 
-func NewPrinter() Printer {
-	return Printer{
+func NewPrinter() *Printer {
+	return &Printer{
 		Output: os.Stdout,
 	}
 }
 
-func (p Printer) Print() {
+func (p *Printer) Print() {
 	fmt.Fprintln(p.Output, "Hello, world")
 }
 
