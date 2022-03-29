@@ -15,10 +15,16 @@ type Pipeline struct {
 	Error  error
 }
 
-func FromString(s string) *Pipeline {
+func New() *Pipeline {
 	return &Pipeline{
-		Reader: strings.NewReader(s),
+		Output: os.Stdout,
 	}
+}
+
+func FromString(s string) *Pipeline {
+	p := New()
+	p.Reader = strings.NewReader(s)
+	return p
 }
 
 func FromFile(pathname string) *Pipeline {
@@ -26,9 +32,9 @@ func FromFile(pathname string) *Pipeline {
 	if err != nil {
 		return &Pipeline{Error: err}
 	}
-	return &Pipeline{
-		Reader: f,
-	}
+	p := New()
+	p.Reader = f
+	return p
 }
 
 func (p *Pipeline) Column(col int) *Pipeline {
