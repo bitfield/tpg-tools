@@ -63,10 +63,17 @@ func TestColumnError(t *testing.T) {
 
 func TestColumnInvalid(t *testing.T) {
 	t.Parallel()
-	p := pipeline.FromString("")
+	p := pipeline.FromString("1 2 3\n1 2 3\n1 2 3\n")
 	p.Column(-1)
 	if p.Error == nil {
 		t.Error("want error on non-positive Column, but got nil")
+	}
+	data, err := io.ReadAll(p.Column(1).Reader)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(data) > 0 {
+		t.Errorf("want no output from Column with invalid col, but got %q", data)
 	}
 }
 

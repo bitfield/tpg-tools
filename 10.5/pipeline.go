@@ -44,6 +44,7 @@ func (p *Pipeline) Column(col int) *Pipeline {
 	}
 	if col < 1 {
 		p.Error = fmt.Errorf("bad column %d: must be positive", col)
+		return p
 	}
 	result := &bytes.Buffer{}
 	scanner := bufio.NewScanner(p.Reader)
